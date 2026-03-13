@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 function calculadora(){
     while(true){
     let resultado = 0.0;
@@ -36,7 +36,6 @@ if( operador != "/"|| operando2 !=0 ){
     }
 }
 }
-=======
 function calculadora(){
     while(true){
     let resultado = 0.0;
@@ -73,4 +72,3 @@ function calculadora(){
    }
 
 }
->>>>>>> ccb0c7df2141d8fa3b6745c959fe6d00ce46976d
