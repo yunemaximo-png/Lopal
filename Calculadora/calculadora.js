@@ -1,4 +1,3 @@
-
 function calculadora(){
     while(true){
     let resultado = 0.0;
