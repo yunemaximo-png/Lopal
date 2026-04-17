@@ -8,6 +8,7 @@
 //Modelo
 let canvas = document.querySelector("#jogo");
 let contexto = canvas.getContext("2d");
+const gravidade = 0.01;
 let lancamento = (Math.round(Math.random()) == 0);//Variável booleana pseudoaleatória
  
 let moduloLunar = {
@@ -113,10 +114,7 @@ function desenharModuloLunar(){
  
     if(moduloLunar.motorLigado){
         desenharChama();
-        moduloLunar.combustivel--;
-        if(moduloLunar.combustivel <= 0){
-            moduloLunar.motorLigado = false;
-        }
+        consumirCombustivel();
     }
    
     contexto.restore();
@@ -149,22 +147,29 @@ function desenhar(){
     mostrarAngulo();
     mostrarIndicador();
     
+    if(encerrarJogo()){
+        return;
+    }
 
-    if(moduloLunar.posicao.y + moduloLunar.altura * 0.5 > canvas.height ){
+    requestAnimationFrame(desenhar);
+}
+
+//Controle
+document.addEventListener('keydown', teclaPressionada);
+
+function encerrarJogo(){
+   if(moduloLunar.posicao.y + moduloLunar.altura * 0.5 > canvas.height){
         if(moduloLunar.velocidade.y <= 0.5 && Math.abs(moduloLunar.velocidade.x )<= 0.5 
             && Math.abs(moduloLunar.angulo) <= 5){
              mostrarResultado("Você pousou com sucesso!", cor = "green")
         }else {
             mostrarResultado("Morte", cor = "red")
         }
-        return
+        return true;
     }
-    requestAnimationFrame(desenhar);
+    return false;
 }
 
-//Controle
-document.addEventListener('keydown', teclaPressionada);
-  
 function teclaPressionada(evento){
     if (evento.key == "ArrowUp" && moduloLunar.combustivel > 0){
         moduloLunar.motorLigado = true;
@@ -186,8 +191,14 @@ function teclaSolta(evento){
         moduloLunar.rotacaoAntiHorario = false;
     }
 }
- 
-const gravidade = 0.01;
+
+function consumirCombustivel(){
+        moduloLunar.combustivel--;
+        if(moduloLunar.combustivel <= 0){
+            moduloLunar.motorLigado = false;
+        }
+}
+
 function atracaoGravitacional(){
     //atração gravitacional
     moduloLunar.posicao.x += moduloLunar.velocidade.x;
