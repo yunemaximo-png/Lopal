@@ -4,7 +4,8 @@
 //Versão 0.1.0 1° compatibilidade 2° funcionalidade 3° correção de erros
 
 /** @type {HTMLCanvasElement} */
- 
+
+//Modelo
 let canvas = document.querySelector("#jogo");
 let contexto = canvas.getContext("2d");
 let lancamento = (Math.round(Math.random()) == 0);//Variável booleana pseudoaleatória
@@ -28,12 +29,30 @@ let moduloLunar = {
     rotacaoHorario: false
 }
 
-function mosrtarVelocidadeHorizontal(){
+//Visualização
+
+function mostrarIndicador(mensagem, x, y){
     contexto.font = "bold 18px Arial";
     contexto.textAlign = "left";
     contexto.testBaseLine = "middle";
     contexto.fillStyle = "lightgray";
     contexto.fillText(
+        mensagem,
+        x,
+        y
+    );
+}
+
+function mostrarResultado(mensagem, cor){
+    contexto.font = "bold 40px Calibri";
+    contexto.textAlign = "center";
+    contexto.textBaseline = "middle";
+    contexto.fillStyle = cor;
+    contexto.fillText(mensagem, canvas.width * 0.5, canvas.height * 0.5);
+}
+
+function mosrtarVelocidadeHorizontal(){
+    mostrarIndicador(
         `Velocidade Horizontal: ${(10 * moduloLunar.velocidade.x).toFixed(2)}`,
         50,
         40
@@ -41,11 +60,7 @@ function mosrtarVelocidadeHorizontal(){
 }
  
 function mostrarVelocidadeVertical(){
-    contexto.font = "bold 18px Arial";
-    contexto.textAlign = "left";
-    contexto.testBaseLine = "middle";
-    contexto.fillStyle = "lightgray";
-    contexto.fillText(
+    mostrarIndicador(
         `Velocidade Vertical: ${(10 * moduloLunar.velocidade.y).toFixed(2)}`,
         50,
         60
@@ -53,33 +68,23 @@ function mostrarVelocidadeVertical(){
 }
 
 function mostrarAngulo(){
-    contexto.font = "bold 18px Arial";
-    contexto.textAlign = "left";
-    contexto.testBaseLine = "middle";
-    contexto.fillStyle = "lightgray";
-    contexto.fillText(`Ângulo: ${(moduloLunar.angulo * 100 / Math.PI ).toFixed(0)}`,
+    mostrarIndicador(
+        `Ângulo: ${(moduloLunar.angulo * 100 / Math.PI ).toFixed(0)}`,
         400,
         60
     );
 }
 
 function mostrarAltitude(){
-    contexto.font = "bold 18px Arial";
-    contexto.textAlign = "left";
-    contexto.testBaseLine = "middle";
-    contexto.fillStyle = "lightgray";
-    contexto.fillText(`Altitude: ${(10 * canvas.height - moduloLunar.posicao.y).toFixed(0)}`,
+    mostrarIndicador(
+    `Altitude: ${(10 * canvas.height - moduloLunar.posicao.y).toFixed(0)}`,
         400,
         40
     );
 }
  
 function mostrarCombustivel(){
-    contexto.font = "bold 18px Arial";
-    contexto.textAlign = "left";
-    contexto.testBaseLine = "middle";
-    contexto.fillStyle = "lightgray";
-    contexto.fillText(
+    mostrarIndicador(
         `Combustível: ${(moduloLunar.combustivel / 10 ).toFixed(0)}%`,
         50,
         80
@@ -142,6 +147,8 @@ function desenhar(){
     mostrarCombustivel();
     mostrarAltitude();
     mostrarAngulo();
+    mostrarIndicador();
+    
 
     if(moduloLunar.posicao.y + moduloLunar.altura * 0.5 > canvas.height ){
         if(moduloLunar.velocidade.y <= 0.5 && Math.abs(moduloLunar.velocidade.x )<= 0.5 
@@ -154,17 +161,10 @@ function desenhar(){
     }
     requestAnimationFrame(desenhar);
 }
- 
-function mostrarResultado(mensagem, cor){
-    contexto.font = "bold 40px Calibri";
-    contexto.textAlign = "center";
-    contexto.textBaseline = "middle";
-    contexto.fillStyle = cor;
-    contexto.fillText(mensagem, canvas.width * 0.5, canvas.height * 0.5);
-}
- 
+
+//Controle
 document.addEventListener('keydown', teclaPressionada);
-//  
+  
 function teclaPressionada(evento){
     if (evento.key == "ArrowUp" && moduloLunar.combustivel > 0){
         moduloLunar.motorLigado = true;
