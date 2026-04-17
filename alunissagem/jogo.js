@@ -6,19 +6,20 @@
 /** @type {HTMLCanvasElement} */
  
 let canvas = document.querySelector("#jogo");
-let contexto =canvas.getContext("2d");
+let contexto = canvas.getContext("2d");
+let lancamento = (Math.round(Math.random()) == 0);//Variável booleana pseudoaleatória
  
 let moduloLunar = {
     posicao: {
-        x: 700,
+        x: lancamento ? 100: 700,
         y: 100
     },
-    angulo: Math.PI/2,
+    angulo: lancamento ? -Math.PI/2 : Math.PI/2,
     largura: 20,
     altura: 20,
     cor: "lightgray",
     velocidade:{
-        x: -2,
+        x: lancamento? 2: -2,
         y: 0,
     },
     motorLigado: false,
@@ -39,7 +40,7 @@ function mosrtarVelocidadeHorizontal(){
     );
 }
  
-function mosrtarVelocidadeVertical(){
+function mostrarVelocidadeVertical(){
     contexto.font = "bold 18px Arial";
     contexto.textAlign = "left";
     contexto.testBaseLine = "middle";
@@ -48,6 +49,28 @@ function mosrtarVelocidadeVertical(){
         `Velocidade Vertical: ${(10 * moduloLunar.velocidade.y).toFixed(2)}`,
         50,
         60
+    );
+}
+
+function mostrarAngulo(){
+    contexto.font = "bold 18px Arial";
+    contexto.textAlign = "left";
+    contexto.testBaseLine = "middle";
+    contexto.fillStyle = "lightgray";
+    contexto.fillText(`Ângulo: ${(moduloLunar.angulo * 100 / Math.PI ).toFixed(0)}`,
+        400,
+        60
+    );
+}
+
+function mostrarAltitude(){
+    contexto.font = "bold 18px Arial";
+    contexto.textAlign = "left";
+    contexto.testBaseLine = "middle";
+    contexto.fillStyle = "lightgray";
+    contexto.fillText(`Altitude: ${(10 * canvas.height - moduloLunar.posicao.y).toFixed(0)}`,
+        400,
+        40
     );
 }
  
@@ -114,9 +137,11 @@ function desenhar(){
     atracaoGravitacional();
     desenharFundo();
     desenharModuloLunar();
-    mosrtarVelocidadeVertical();
+    mostrarVelocidadeVertical();
     mosrtarVelocidadeHorizontal();
     mostrarCombustivel();
+    mostrarAltitude();
+    mostrarAngulo();
 
     if(moduloLunar.posicao.y + moduloLunar.altura * 0.5 > canvas.height ){
         if(moduloLunar.velocidade.y <= 0.5 && Math.abs(moduloLunar.velocidade.x )<= 0.5 
